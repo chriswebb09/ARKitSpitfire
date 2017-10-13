@@ -8,6 +8,8 @@
 
 import ARKit
 import SceneKit
+import CoreLocation
+import GLKit
 
 class PlaneSceneView: ARSCNView {
     
@@ -23,8 +25,8 @@ class PlaneSceneView: ARSCNView {
     var glass: SCNNode!
     var pilot: SCNNode!
     var reflect: SCNNode!
-    
     var nodes: [SCNNode] = []
+    
     
     func setupPlane() {
         scene = SCNScene(named: "art.scnassets/spitfiremodelplane.scn")!
@@ -40,37 +42,52 @@ class PlaneSceneView: ARSCNView {
         landingLight = planeNode.childNode(withName: "landing_light", recursively: false)
         wheelSupport = planeNode.childNode(withName: "wheel_support", recursively: false)
         reflect = planeNode.childNode(withName: "reflect", recursively: false)
-        planeNode.scale = SCNVector3(0.025, 0.025, 0.025)
+        planeNode.scale = SCNVector3(0.055, 0.055, 0.055)
         planeNode.position = SCNVector3(0, 0, -2.25)
         nodes = [planeNode, engineNode, bodyFront, leftWing, rightWing, cockpit, rearNode, pilot, glass, landingLight, wheelSupport, reflect]
         let nodeArray = scene.rootNode.childNodes
+        startEngine()
         for childNode in nodeArray {
             planeNode.addChildNode(childNode as SCNNode)
         }
-        spinPropellor()
     }
-    func spinPropellor() {
+    
+    func startEngine() {
         DispatchQueue.main.async {
-            let spin = SCNAction.rotateBy(x: 0, y: 0, z: 127.5, duration: 0.85)
-            let spinSequence = SCNAction.sequence([spin])
-            let spinLoop = SCNAction.repeatForever(spinSequence)
-            self.engineNode.runAction(spinLoop)
+            let rotate = SCNAction.rotateBy(x: 0, y: 0, z: 85, duration: 0.5)
+            let moveSequence = SCNAction.sequence([rotate])
+            let moveLoop = SCNAction.repeatForever(moveSequence)
+            self.engineNode.runAction(moveLoop, forKey: "engine")
         }
     }
     
-    var duration: TimeInterval = 0.35
-    var counter: Int = 0
+    func stopEngine() {
+        self.engineNode.runAction(SCNAction.rotateBy(x: 0, y: 0, z: -85, duration: 0.5), forKey: "engine")
+        engineNode.removeAnimation(forKey: "engine")
+    }
     
-    func moveForward() {
+    func moveFrom(location: CLLocation, to destination: CLLocation) {
+        self.engineNode.isHidden = true
+        let bearing = location.bearingToLocationRadian(destination)
+        
         DispatchQueue.main.async {
             SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
+            SCNTransaction.animationDuration = 0.25
             for node in self.nodes {
-                node.transform = SCNMatrix4Mult(node.transform, SCNMatrix4MakeTranslation(0, node.position.y + 1, node.position.z + -2))
+                let rotation = SCNMatrix4MakeRotation(Float(-1 * bearing), 0, 1, 0)
+                node.transform = SCNMatrix4Mult(node.transform, rotation)
             }
-            self.rearNode.position = SCNVector3(self.rearNode.position.x, self.rearNode.position.y - 0.05, self.rearNode.position.z)
+            SCNTransaction.commit()
             
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 20
+            let translation = MatrixHelper.transformMatrix(for: matrix_identity_float4x4, originLocation: location, location: destination)
+            let position = SCNVector3.positionFromTransform(translation)
+            for node in self.nodes {
+                node.position = position
+            }
             SCNTransaction.commit()
         }
     }
 }
+

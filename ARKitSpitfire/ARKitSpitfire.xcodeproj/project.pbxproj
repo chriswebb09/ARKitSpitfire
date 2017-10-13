@@ -14,6 +14,9 @@
 		A75DEB1B1F8F5A4F003867B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A75DEB1A1F8F5A4F003867B0 /* Assets.xcassets */; };
 		A75DEB1E1F8F5A4F003867B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A75DEB1C1F8F5A4F003867B0 /* LaunchScreen.storyboard */; };
 		A75DEB261F8F5A7E003867B0 /* PlaneSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DEB251F8F5A7E003867B0 /* PlaneSceneView.swift */; };
+		A781A6071F903DC900DB3617 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A781A6061F903DC900DB3617 /* LocationService.swift */; };
+		A7874CD01F902AED0063354E /* MatrixHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7874CCF1F902AED0063354E /* MatrixHelper.swift */; };
+		A7874CD21F902CF70063354E /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7874CD11F902CF70063354E /* NavigationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		A75DEB1D1F8F5A4F003867B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A75DEB1F1F8F5A4F003867B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A75DEB251F8F5A7E003867B0 /* PlaneSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneSceneView.swift; sourceTree = "<group>"; };
+		A781A6061F903DC900DB3617 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		A7874CCF1F902AED0063354E /* MatrixHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixHelper.swift; sourceTree = "<group>"; };
+		A7874CD11F902CF70063354E /* NavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +72,9 @@
 				A75DEB1C1F8F5A4F003867B0 /* LaunchScreen.storyboard */,
 				A75DEB1F1F8F5A4F003867B0 /* Info.plist */,
 				A75DEB251F8F5A7E003867B0 /* PlaneSceneView.swift */,
+				A7874CCF1F902AED0063354E /* MatrixHelper.swift */,
+				A7874CD11F902CF70063354E /* NavigationService.swift */,
+				A781A6061F903DC900DB3617 /* LocationService.swift */,
 			);
 			path = ARKitSpitfire;
 			sourceTree = "<group>";
@@ -145,6 +154,9 @@
 			files = (
 				A75DEB261F8F5A7E003867B0 /* PlaneSceneView.swift in Sources */,
 				A75DEB161F8F5A4F003867B0 /* ViewController.swift in Sources */,
+				A7874CD01F902AED0063354E /* MatrixHelper.swift in Sources */,
+				A7874CD21F902CF70063354E /* NavigationService.swift in Sources */,
+				A781A6071F903DC900DB3617 /* LocationService.swift in Sources */,
 				A75DEB121F8F5A4E003867B0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

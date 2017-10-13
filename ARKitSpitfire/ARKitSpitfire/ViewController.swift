@@ -9,20 +9,28 @@
 import UIKit
 import SceneKit
 import ARKit
+import CoreLocation
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet weak var sceneView: PlaneSceneView!
     
+    var locationService = LocationService()
+    var startingLocation: CLLocation!
+    var destinationLocation: CLLocation!
+    
+    var planeCanFly: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.destinationLocation = CLLocation(latitude: 40.7375124, longitude: -73.98076650000002)
         // Set the view's delegate
         sceneView.delegate = self
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
+        locationService.delegate = self
         
+        locationService.startUpdatingLocation(locationManager: locationService.locationManager!)
         // Create a new scene
         sceneView.setupPlane()
     }
@@ -32,6 +40,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -50,20 +59,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        sceneView.moveForward()
+        
+        if planeCanFly {
+            sceneView.moveFrom(location: startingLocation, to: destinationLocation)
+        }
     }
 
     // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
-    
+
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -77,5 +80,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
+    }
+}
+
+extension ViewController: LocationServiceDelegate {
+    
+    func trackingLocation(for currentLocation: CLLocation) {
+        startingLocation = currentLocation
+        planeCanFly = true
+    }
+    
+    func trackingLocationDidFail(with error: Error) {
+        print(error.localizedDescription)
     }
 }
